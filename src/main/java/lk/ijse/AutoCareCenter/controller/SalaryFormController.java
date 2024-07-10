@@ -52,8 +52,7 @@ public class SalaryFormController {
     @FXML
     private AnchorPane rootNode;
 
-    @FXML
-    private TextField sId;
+
 
     @FXML
     private TableView<SalaryTm> tblSalary;
@@ -63,6 +62,8 @@ public class SalaryFormController {
     private JFXComboBox<String> CmbMonth;
     @FXML
     private Label LblEmpName;
+    @FXML
+    private Label lblId;
     SalaryBO salaryBO = (SalaryBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.SALARY);
     EmployeeBO employeeBO = (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
 
@@ -73,6 +74,7 @@ public class SalaryFormController {
         getEmployeeIds();
         setMonth();
         loadAllSalary();
+        loadNextId();
     }
 
     private void setCellValueFactory() {
@@ -87,11 +89,34 @@ public class SalaryFormController {
         if(index <= -1) {
             return;
         } else {
-            sId.setText(tblSalary.getItems().get(index).getId());
+            lblId.setText(tblSalary.getItems().get(index).getId());
             amount.setText(String.valueOf(tblSalary.getItems().get(index).getAmount()));
             CmbMonth.setValue(tblSalary.getItems().get(index).getMonth());
             CmbEmpId.setValue(tblSalary.getItems().get(index).getEmpId());
         }
+    }
+    private void loadNextId() {
+        try {
+            String currentId = salaryBO.currentId();
+            String nextId = nextId(currentId);
+
+            lblId.setText(nextId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String nextId(String currentId) {
+        if (currentId != null) {
+            String[] split = currentId.split("S");
+//            System.out.println("Arrays.toString(split) = " + Arrays.toString(split));
+            int id = Integer.parseInt(split[1]);    //2
+            return "S" + ++id;
+
+        }
+        return "S1";
     }
 
     private void setMonth() {
@@ -128,7 +153,7 @@ public class SalaryFormController {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        String id = sId.getText();
+        String id = lblId.getText();
         int Amount = Integer.parseInt(amount.getText());
         String Month = CmbMonth.getValue();
         String EmpId = (String) CmbEmpId.getValue();
@@ -147,12 +172,13 @@ public class SalaryFormController {
                 throw new RuntimeException(e);
             }
             loadAllSalary();
+            clearFields();
         }
     }
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        String id = sId.getText();
+        String id = lblId.getText();
         int Amount = Integer.parseInt(amount.getText());
         String Month = CmbMonth.getValue();
         String EmpId = (String) CmbEmpId.getValue();
@@ -171,19 +197,20 @@ public class SalaryFormController {
                 throw new RuntimeException(e);
             }
             loadAllSalary();
+            clearFields();
         }
     }
 
     @FXML
     void txtSearchOnAction(ActionEvent event) {
-        String id = sId.getText();
+        String id = lblId.getText();
 
 
         try {
             Salary salaryDTO = salaryBO.searchById(id);
 
             if (salaryDTO != null) {
-                sId.setText(salaryDTO.getId());
+                lblId.setText(salaryDTO.getId());
                 amount.setText(String.valueOf(salaryDTO.getAmount()));
                 CmbMonth.setValue(salaryDTO.getMonth());
                 CmbEmpId.setValue(salaryDTO.getEmpId());
@@ -196,7 +223,7 @@ public class SalaryFormController {
     }
 
     public void btnDeleteOnAction(ActionEvent actionEvent) {
-        String id = sId.getText();
+        String id = lblId.getText();
 
         try {
             boolean isDeleted = salaryBO.delete(id);
@@ -253,8 +280,11 @@ public class SalaryFormController {
 
 
     private void clearFields() {
-        sId.setText("");
+
         amount.setText("");
+        CmbMonth.setValue("");
+        CmbEmpId.setValue("");
+        loadNextId();
     }
 
     public void btnClearOnAction(ActionEvent actionEvent) {
@@ -262,14 +292,14 @@ public class SalaryFormController {
     }
 
     public boolean isValid() {
-        if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) sId)) return false;
+      //  if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) sId)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, (JFXTextField) amount)) return false;
 
         return true;
     }
 
     public void txtIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) sId);
+       // Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) sId);
 
     }
 

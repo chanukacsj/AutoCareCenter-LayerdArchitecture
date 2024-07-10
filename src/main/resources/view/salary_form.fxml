@@ -174,5 +174,10 @@
       </ImageView>
       <JFXTextField fx:id="sId" layoutX="85.0" layoutY="177.0" onAction="#txtSearchOnAction" onKeyReleased="#txtIDOnKeyReleased" prefHeight="26.0" prefWidth="190.0" />
       <JFXTextField fx:id="amount" layoutX="85.0" layoutY="260.0" onKeyReleased="#txtAmountOnKeyReleased" prefHeight="26.0" prefWidth="190.0" />
+      <Label fx:id="lblId" layoutX="117.0" layoutY="177.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

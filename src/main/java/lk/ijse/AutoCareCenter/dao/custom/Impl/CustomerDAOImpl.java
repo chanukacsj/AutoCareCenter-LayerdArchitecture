@@ -24,7 +24,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     public boolean save(Customer entity) throws SQLException, ClassNotFoundException {
-
+        System.out.println(entity);
         return SqlUtil.execute("INSERT INTO customers VALUES(?, ?, ?, ?)", entity.getId(), entity.getName(),  entity.getContact(),entity.getAddress());
 
     }
@@ -61,6 +61,18 @@ public class CustomerDAOImpl implements CustomerDAO {
     @Override
     public int getMaterialCount() throws SQLException, ClassNotFoundException {
         return 0;
+    }
+
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+
+            ResultSet rst = SqlUtil.execute("SELECT id FROM customers ORDER BY id desc LIMIT 1");
+
+            if(rst.next()) {
+                return rst.getString(1);
+            }
+            return null;
+
     }
 
     public int getCustomerCount() throws SQLException, ClassNotFoundException {

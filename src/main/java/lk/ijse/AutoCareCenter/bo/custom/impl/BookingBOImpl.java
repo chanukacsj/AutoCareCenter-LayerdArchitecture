@@ -49,4 +49,9 @@ public class BookingBOImpl implements BookingBO {
         return bookingDAO.getIds();
     }
 
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        return bookingDAO.currentId();
+    }
+
 }

@@ -31,4 +31,8 @@ public class MaterialBOImpl implements MaterialBO {
     public int getMaterialCount() throws SQLException, ClassNotFoundException {
         return materialDAO.getMaterialCount();
     }
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        return materialDAO.currentId();
+    }
 }

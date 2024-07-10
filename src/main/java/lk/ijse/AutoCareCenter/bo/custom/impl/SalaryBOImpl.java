@@ -43,4 +43,9 @@ public class SalaryBOImpl implements SalaryBO {
     public boolean delete(String id) throws SQLException, ClassNotFoundException {
         return salaryDAO.delete(id);
     }
+
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        return salaryDAO.currentId();
+    }
 }

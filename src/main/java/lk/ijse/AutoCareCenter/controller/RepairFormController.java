@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -68,12 +69,13 @@ public class RepairFormController {
     @FXML
     private JFXTextField txtEndTime;
 
-    @FXML
-    private JFXTextField txtRepairId;
+
+   // private JFXTextField txtRepairId;
 
     @FXML
     private JFXTextField txtStartTime;
-
+    @FXML
+    private Label lblId;
     RepairBO repairBO = (RepairBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.REPAIR);
     EmployeeBO employeeBO = (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
 
@@ -85,6 +87,7 @@ public class RepairFormController {
         getEmployeeIds();
         getVehicleId();
         loadAllRepair();
+        loadNextId();
     }
 
     private void setCellValueFactory() {
@@ -102,7 +105,7 @@ public class RepairFormController {
         if (index <= -1) {
             return;
         } else {
-            txtRepairId.setText(tblPay.getItems().get(index).getRId());
+            lblId.setText(tblPay.getItems().get(index).getRId());
             txtStartTime.setText(tblPay.getItems().get(index).getStartTime());
             txtEndTime.setText(tblPay.getItems().get(index).getEndTime());
             txtDescription.setText(tblPay.getItems().get(index).getDescription());
@@ -111,6 +114,29 @@ public class RepairFormController {
 
 
         }
+    }
+    private void loadNextId() {
+        try {
+            String currentId = repairBO.currentId();
+            String nextId = nextId(currentId);
+
+            lblId.setText(nextId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String nextId(String currentId) {
+        if (currentId != null) {
+            String[] split = currentId.split("R");
+//            System.out.println("Arrays.toString(split) = " + Arrays.toString(split));
+            int id = Integer.parseInt(split[1]);    //2
+            return "R" + ++id;
+
+        }
+        return "R1";
     }
 
     public void loadAllRepair() {
@@ -131,10 +157,11 @@ public class RepairFormController {
     }
 
     private void clearFields() {
-        txtRepairId.setText("");
+
         txtStartTime.setText("");
         txtEndTime.setText("");
         txtDescription.setText("");
+        loadNextId();
     }
 
     @FXML
@@ -144,12 +171,14 @@ public class RepairFormController {
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
-        String id = txtRepairId.getText();
+        String id = lblId.getText();
 
         try {
             boolean isDeleted = repairBO.delete(id);
+            System.out.println("awa");
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "deleted!").show();
+                System.out.println("delete");
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -157,12 +186,12 @@ public class RepairFormController {
             throw new RuntimeException(e);
         }
         loadAllRepair();
-        clearFields();
+
     }
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        String id = txtRepairId.getText();
+        String id = lblId.getText();
         String StartTime = txtStartTime.getText();
         String EndTime = txtEndTime.getText();
         String description = txtDescription.getText();
@@ -184,13 +213,15 @@ public class RepairFormController {
                 throw new RuntimeException(e);
             }
             loadAllRepair();
+            clearFields();
+
         }
     }
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
 
-        String id = txtRepairId.getText();
+        String id = lblId.getText();
         String StartTime = txtStartTime.getText();
         String EndTime = txtEndTime.getText();
         String description = txtDescription.getText();
@@ -211,18 +242,20 @@ public class RepairFormController {
                 throw new RuntimeException(e);
             }
             loadAllRepair();
+            clearFields();
+
         }
     }
 
     @FXML
     void txtSearchOnAction(ActionEvent event) {
-        String id = txtRepairId.getText();
+        String id = cmbVehicleId.getValue();
 
         try {
             Repair repairDTO = repairBO.searchById(id);
 
             if (repairDTO != null) {
-                txtRepairId.setText(repairDTO.getRId());
+                lblId.setText(repairDTO.getRId());
                 txtStartTime.setText(repairDTO.getStartTime());
                 txtEndTime.setText(repairDTO.getEndTime());
                 txtDescription.setText(repairDTO.getDescription());
@@ -279,14 +312,14 @@ public class RepairFormController {
     }
 
     public boolean isValid() {
-        if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtRepairId)) return false;
+       // if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtRepairId)) return false;
         if (!Regex.setTextColor(TextField.NAME, (JFXTextField) txtDescription)) return false;
 
         return true;
     }
 
     public void txtIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtRepairId);
+       // Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtRepairId);
 
     }
 

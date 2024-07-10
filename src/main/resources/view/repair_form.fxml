@@ -25,13 +25,13 @@
             <Image url="@../asserts/2d-graphic-wallpaper-with-colorful-grainy-gradients.jpg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="509.0" fitWidth="385.0" layoutX="670.0" layoutY="229.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="509.0" fitWidth="385.0" layoutX="611.0" layoutY="229.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../asserts/Remove-bg.ai_1715258516294.png" />
          </image>
       </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="178.0" layoutX="167.0" layoutY="158.0" opacity="0.37" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="606.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="55.0" layoutY="63.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1015.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="55.0" layoutX="-4.0" layoutY="63.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1015.0">
          <fill>
             <LinearGradient endX="1.0" endY="1.0">
                <stops>
@@ -173,5 +173,10 @@
          </font>
       </Label>
       <JFXTextField fx:id="txtDescription" layoutX="591.0" layoutY="280.0" onKeyReleased="#txtDescriptionOnKeyReleased" prefHeight="26.0" prefWidth="164.0" />
+      <Label fx:id="lblId" layoutX="220.0" layoutY="201.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

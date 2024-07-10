@@ -49,4 +49,9 @@ public class VehicleBOImpl implements VehicleBO {
     public List<String> getIds() throws SQLException, ClassNotFoundException {
         return vehicleDAO.getIds();
     }
+
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        return vehicleDAO.currentId();
+    }
 }

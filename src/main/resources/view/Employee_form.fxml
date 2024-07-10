@@ -158,5 +158,10 @@
       <JFXTextField fx:id="txtAddress" layoutX="250.0" layoutY="258.0" onKeyReleased="#txtAddressOnKeyReleased" prefHeight="26.0" prefWidth="170.0" />
       <JFXTextField fx:id="txtContact" layoutX="509.0" layoutY="258.0" onKeyReleased="#txtContactOnKeyReleased" prefHeight="26.0" prefWidth="170.0" />
       <JFXTextField fx:id="txtId" layoutX="250.0" layoutY="172.0" onAction="#txtSearchOnAction" onKeyReleased="#txtIDOnKeyReleased" prefHeight="26.0" prefWidth="170.0" />
+      <Label fx:id="lblId" layoutX="288.0" layoutY="172.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

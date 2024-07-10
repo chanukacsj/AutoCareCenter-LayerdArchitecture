@@ -3,10 +3,7 @@ package lk.ijse.AutoCareCenter.controller;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -33,6 +30,8 @@ public class EmployeeFormController {
 
     @FXML
     private AnchorPane rootNode;
+    @FXML
+    private Label lblId;
 
     @FXML
     private TableColumn<?, ?> colContact;
@@ -52,8 +51,8 @@ public class EmployeeFormController {
     @FXML
     private TextField txtContact;
 
-    @FXML
-    private TextField txtId;
+  //  @FXML
+    //private TextField txtId;
 
     @FXML
     private TextField txtName;
@@ -64,6 +63,7 @@ public class EmployeeFormController {
     public void initialize() {
         //this.employeeList = getAllEmployee();
         setCellValueFactory();
+        loadNextId();
         // loadEmployeeTable();
         loadAllEmployee();
     }
@@ -80,11 +80,34 @@ public class EmployeeFormController {
         if(index <= -1) {
             return;
         } else {
-            txtId.setText(tblEmployee.getItems().get(index).getId());
+            lblId.setText(tblEmployee.getItems().get(index).getId());
             txtName.setText(tblEmployee.getItems().get(index).getName());
             txtAddress.setText(tblEmployee.getItems().get(index).getAddress());
             txtContact.setText(tblEmployee.getItems().get(index).getContact());
         }
+    }
+    private void loadNextId() {
+        try {
+            String currentId = employeeBO.currentId();
+            String nextId = nextId(currentId);
+
+            lblId.setText(nextId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String nextId(String currentId) {
+        if (currentId != null) {
+            String[] split = currentId.split("E");
+//            System.out.println("Arrays.toString(split) = " + Arrays.toString(split));
+            int id = Integer.parseInt(split[1]);    //2
+            return "E" + ++id;
+
+        }
+        return "E1";
     }
 
     public void loadAllEmployee() {
@@ -105,10 +128,10 @@ public class EmployeeFormController {
     }
 
     private void clearFields() {
-        txtId.setText("");
         txtName.setText("");
         txtAddress.setText("");
         txtContact.setText("");
+        loadNextId();
     }
 
 
@@ -119,7 +142,7 @@ public class EmployeeFormController {
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = lblId.getText();
 
         try {
             boolean isDeleted = employeeBO.delete(id);
@@ -138,7 +161,7 @@ public class EmployeeFormController {
     @FXML
     void btnSaveOnAction(ActionEvent event) {
 
-        String id = txtId.getText();
+        String id = lblId.getText();
         String name = txtName.getText();
         String address = txtAddress.getText();
         String contact = txtContact.getText();
@@ -161,7 +184,7 @@ public class EmployeeFormController {
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = lblId.getText();
         String name = txtName.getText();
         String contact = txtContact.getText();
         String address = txtAddress.getText();
@@ -188,13 +211,13 @@ public class EmployeeFormController {
 
     @FXML
     void txtSearchOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = txtContact.getText();
 
         try {
             Employee employeeDTO = employeeBO.searchById(id);
 
             if (employeeDTO != null) {
-                txtId.setText(employeeDTO.getId());
+                lblId.setText(employeeDTO.getId());
                 txtName.setText(employeeDTO.getName());
                 txtAddress.setText(employeeDTO.getAddress());
                 txtContact.setText(employeeDTO.getContact());
@@ -207,7 +230,7 @@ public class EmployeeFormController {
     }
 
     public boolean isValid() {
-        if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId)) return false;
+     //   if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.NAME, (JFXTextField) txtName)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.CONTACT, (JFXTextField) txtContact)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ADDRESS, (JFXTextField) txtAddress)) return false;
@@ -215,7 +238,7 @@ public class EmployeeFormController {
     }
 
     public void txtIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId);
+     //   Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId);
 
     }
 

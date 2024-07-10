@@ -54,4 +54,14 @@ public class RepairDAOImpl implements RepairDAO {
     public int getMaterialCount() throws SQLException, ClassNotFoundException {
         return 0;
     }
+
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        ResultSet rst = SqlUtil.execute("SELECT rid FROM repairAndService ORDER BY rid desc LIMIT 1");
+
+        if(rst.next()) {
+            return rst.getString(1);
+        }
+        return null;
+    }
 }

@@ -58,6 +58,16 @@ public class BookingDAOImpl implements BookingDAO {
         return 0;
     }
 
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        ResultSet rst = SqlUtil.execute("SELECT bId FROM booking ORDER BY bId desc LIMIT 1");
+
+        if(rst.next()) {
+            return rst.getString(1);
+        }
+        return null;
+    }
+
     public int getBookingCount() throws SQLException, ClassNotFoundException, SQLException {
         ResultSet resultSet = SqlUtil.execute("SELECT COUNT(*) AS booking_count FROM booking");
 

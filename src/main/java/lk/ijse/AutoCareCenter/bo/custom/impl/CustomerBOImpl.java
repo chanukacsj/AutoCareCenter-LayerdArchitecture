@@ -16,6 +16,11 @@ public class CustomerBOImpl implements CustomerBO {
 
 
     @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        return customerDAO.currentId();
+    }
+
+    @Override
     public ArrayList<CustomerDTO> loadAll() throws SQLException, ClassNotFoundException {
 
         ArrayList<CustomerDTO> allCustomer = new ArrayList<>();

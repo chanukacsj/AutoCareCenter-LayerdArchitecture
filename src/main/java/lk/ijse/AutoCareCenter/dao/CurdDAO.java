@@ -2,6 +2,7 @@ package lk.ijse.AutoCareCenter.dao;
 
 import lk.ijse.AutoCareCenter.model.OrdersDTO;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,5 +22,6 @@ public interface CurdDAO <T> extends SuperDAO {
 
     public int getMaterialCount() throws SQLException, ClassNotFoundException;
 
+    public String currentId() throws SQLException, ClassNotFoundException ;
 
 }

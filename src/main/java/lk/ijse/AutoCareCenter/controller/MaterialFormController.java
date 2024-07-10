@@ -6,10 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -40,6 +37,7 @@ public class MaterialFormController {
     @FXML
     private JFXComboBox<String> cmbSupId;
 
+
     @FXML
     private TableColumn<?, ?> colCode;
 
@@ -57,8 +55,8 @@ public class MaterialFormController {
     @FXML
     private AnchorPane root;
 
-    @FXML
-    private TextField txtCode;
+  //  @FXML
+   // private TextField txtCode;
 
     @FXML
     private TextField txtDescription;
@@ -68,6 +66,8 @@ public class MaterialFormController {
 
     @FXML
     private TextField txtUnitPrice;
+    @FXML
+    private Label lblId;
 
 
     MaterialDetailBO materialDetailBO = (MaterialDetailBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.MATERIALDETAILS);
@@ -78,6 +78,7 @@ public class MaterialFormController {
     Integer index;
     public void initialize() {
         setCellValueFactory();
+        loadNextId();
         loadAllMaterials();
         getSuplierIds();
     }
@@ -95,13 +96,37 @@ public class MaterialFormController {
         if(index <= -1) {
             return;
         } else {
-            txtCode.setText(tblMaterial.getItems().get(index).getCode());
+            lblId.setText(tblMaterial.getItems().get(index).getCode());
             txtDescription.setText(tblMaterial.getItems().get(index).getDescription());
             txtUnitPrice.setText(String.valueOf(tblMaterial.getItems().get(index).getUnitPrice()));
             txtQtyOnHand.setText(String.valueOf(tblMaterial.getItems().get(index).getQtyOnHand()));
             cmbSupId.setValue(tblMaterial.getItems().get(index).getSupId());
         }
     }
+    private void loadNextId() {
+        try {
+            String currentId = materialBO.currentId();
+            String nextId = nextId(currentId);
+
+            lblId.setText(nextId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String nextId(String currentId) {
+        if (currentId != null) {
+            String[] split = currentId.split("M");
+//            System.out.println("Arrays.toString(split) = " + Arrays.toString(split));
+            int id = Integer.parseInt(split[1]);    //2
+            return "M" + ++id;
+
+        }
+        return "M1";
+    }
+
 
     public void loadAllMaterials() {
         tblMaterial.getItems().clear();
@@ -121,13 +146,13 @@ public class MaterialFormController {
 
 
     public void codeSearchOnAction(ActionEvent actionEvent) {
-        String code = txtCode.getText();
+        String code = txtDescription.getText();
 
         try {
             MaterialDetails materialDetailsDTO = materialDetailBO.searchById(code);
 
             if (materialDetailsDTO != null) {
-                txtCode.setText(materialDetailsDTO.getCode());
+                lblId.setText(materialDetailsDTO.getCode());
                 txtDescription.setText(materialDetailsDTO.getDescription());
                 txtQtyOnHand.setText(String.valueOf(materialDetailsDTO.getQtyOnHand()));
                 txtUnitPrice.setText(String.valueOf(materialDetailsDTO.getUnitPrice()));
@@ -143,7 +168,7 @@ public class MaterialFormController {
 
     public void btnSaveOnAction(ActionEvent actionEvent) {
 
-        String code = txtCode.getText();
+        String code = lblId.getText();
         String supId = (String) cmbSupId.getValue();
         String description = txtDescription.getText();
         double unitprice = Double.parseDouble(txtUnitPrice.getText());
@@ -171,11 +196,13 @@ public class MaterialFormController {
             throw new RuntimeException(e);
         }
         loadAllMaterials();
+        clearFields();
+        loadNextId();
     }
 
 
     public void btnUpdateOnAction(ActionEvent actionEvent) {
-        String code = txtCode.getText();
+        String code = lblId.getText();
         String supId = (String) cmbSupId.getValue();
         String description = txtDescription.getText();
         double unitprice = Double.parseDouble(txtUnitPrice.getText());
@@ -200,12 +227,14 @@ public class MaterialFormController {
                 throw new RuntimeException(e);
             }
             loadAllMaterials();
+            clearFields();
+            loadNextId();
         }
     }
 
     @FXML
     public void btnDeleteOnAction(ActionEvent actionEvent) {
-        String Code = txtCode.getText();
+        String Code = lblId.getText();
 
         try {
             boolean isDeleted = materialBO.delete(Code);
@@ -219,11 +248,14 @@ public class MaterialFormController {
         }
         loadAllMaterials();
         clearFields();
+        loadNextId();
     }
 
     private void clearFields() {
-        txtCode.setText("");
+
         txtDescription.setText("");
+        cmbSupId.setValue("");
+        loadNextId();
     }
 
     public void btnClearOnAction(ActionEvent actionEvent) {
@@ -251,7 +283,7 @@ public class MaterialFormController {
     }
 
     public boolean isValid() {
-        if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtCode)) return false;
+      //  if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtCode)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, (JFXTextField) txtUnitPrice))
             return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, (JFXTextField) txtQtyOnHand))
@@ -260,7 +292,7 @@ public class MaterialFormController {
     }
 
     public void txtIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtCode);
+      //  Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtCode);
     }
 
     public void txtPriceOnKeyReleased(KeyEvent keyEvent) {

@@ -3,10 +3,7 @@ package lk.ijse.AutoCareCenter.controller;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -46,13 +43,14 @@ public class SupplierFormController {
     @FXML
     private TextField txtContact;
 
-    @FXML
-    private TextField txtId;
+
 
     @FXML
     private TextField txtName;
     @FXML
     private AnchorPane root;
+    @FXML
+    private Label lblId;
     Integer index;
 
     SupplierBO supplierBO = (SupplierBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.SUPPLIER);
@@ -60,6 +58,7 @@ public class SupplierFormController {
     public void initialize() {
         setCellValueFactory();
         loadAllSupplier();
+        loadNextId();
 
     }
 
@@ -77,11 +76,34 @@ public class SupplierFormController {
         if(index <= -1) {
             return;
         } else {
-            txtId.setText(tblSupplier.getItems().get(index).getId());
+            lblId.setText(tblSupplier.getItems().get(index).getId());
             txtName.setText(tblSupplier.getItems().get(index).getName());
             txtAddress.setText(tblSupplier.getItems().get(index).getAddress());
             txtContact.setText(tblSupplier.getItems().get(index).getContact());
         }
+    }
+    private void loadNextId() {
+        try {
+            String currentId = supplierBO.currentId();
+            String nextId = nextId(currentId);
+
+            lblId.setText(nextId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String nextId(String currentId) {
+        if (currentId != null) {
+            String[] split = currentId.split("S");
+//            System.out.println("Arrays.toString(split) = " + Arrays.toString(split));
+            int id = Integer.parseInt(split[1]);    //2
+            return "S" + ++id;
+
+        }
+        return "S";
     }
 
     public void loadAllSupplier() {
@@ -102,10 +124,11 @@ public class SupplierFormController {
 
     }
     private void clearFields() {
-        txtId.setText("");
+
         txtName.setText("");
         txtAddress.setText("");
         txtContact.setText("");
+        loadNextId();
     }
 
     @FXML
@@ -116,7 +139,7 @@ public class SupplierFormController {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = lblId.getText();
         String name = txtName.getText();
         String address = txtAddress.getText();
         String contact = txtContact.getText();
@@ -134,13 +157,14 @@ public class SupplierFormController {
                 throw new RuntimeException(e);
             }
             loadAllSupplier();
+            clearFields();
         }
     }
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
 
-        String id = txtId.getText();
+        String id = lblId.getText();
         String name = txtName.getText();
         String address = txtAddress.getText();
         String contact = txtContact.getText();
@@ -159,17 +183,18 @@ public class SupplierFormController {
             }
         }
         loadAllSupplier();
+        clearFields();
     }
 
     @FXML
     void txtSearchOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = txtContact.getText();
 
         try {
             Supplier supplierDTO = supplierBO.searchById(id);
 
             if (supplierDTO != null) {
-                txtId.setText(supplierDTO.getId());
+                lblId.setText(supplierDTO.getId());
                 txtName.setText(supplierDTO.getName());
                 txtAddress.setText(supplierDTO.getAddress());
                 txtContact.setText(supplierDTO.getContact());
@@ -184,7 +209,7 @@ public class SupplierFormController {
 
     @FXML
     public void btnDeleteOnAction(ActionEvent actionEvent) {
-        String id = txtId.getText();
+        String id = lblId.getText();
 
         try {
             boolean isDeleted = supplierBO.delete(id);
@@ -201,7 +226,7 @@ public class SupplierFormController {
     }
 
     public boolean isValid() {
-        if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId)) return false;
+       // if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.NAME, (JFXTextField) txtName)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.CONTACT, (JFXTextField) txtContact)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ADDRESS, (JFXTextField) txtAddress)) return false;
@@ -209,7 +234,7 @@ public class SupplierFormController {
     }
 
     public void txtIdOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId);
+       // Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId);
     }
 
     public void txtNameOnKeyReleased(KeyEvent keyEvent) {

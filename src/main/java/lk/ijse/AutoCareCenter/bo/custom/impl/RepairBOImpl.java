@@ -27,7 +27,7 @@ public class RepairBOImpl implements RepairBO {
 
     @Override
     public boolean delete(String id) throws SQLException, ClassNotFoundException {
-        return false;
+        return repairDAO.delete(id);
     }
 
     @Override
@@ -43,5 +43,10 @@ public class RepairBOImpl implements RepairBO {
     @Override
     public Repair searchById(String id) throws SQLException, ClassNotFoundException {
         return repairDAO.searchById(id);
+    }
+
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        return repairDAO.currentId();
     }
 }

@@ -18,4 +18,6 @@ public interface MaterialBO extends SuperBO {
     public List<String> getCodes() throws SQLException, ClassNotFoundException;
 
     public int getMaterialCount() throws SQLException, ClassNotFoundException;
+
+    public String currentId() throws SQLException, ClassNotFoundException ;
 }

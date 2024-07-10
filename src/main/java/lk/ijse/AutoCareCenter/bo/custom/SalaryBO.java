@@ -20,4 +20,6 @@ public interface SalaryBO extends SuperBO {
     public Salary searchById(String id) throws SQLException, ClassNotFoundException;
 
     public boolean delete(String id) throws SQLException, ClassNotFoundException;
+    public  String currentId() throws SQLException, ClassNotFoundException;
+
 }

@@ -21,4 +21,6 @@ public interface BookingBO extends SuperBO {
 
     public List<String> getIds() throws SQLException, ClassNotFoundException;
 
+    public  String currentId() throws SQLException, ClassNotFoundException;
+
 }

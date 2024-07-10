@@ -54,4 +54,14 @@ public class SalaryDAOImpl implements SalaryDAO {
     public int getMaterialCount() throws SQLException, ClassNotFoundException {
         return 0;
     }
+
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        ResultSet rst = SqlUtil.execute("SELECT sId FROM salary ORDER BY sId desc LIMIT 1");
+
+        if(rst.next()) {
+            return rst.getString(1);
+        }
+        return null;
+    }
 }

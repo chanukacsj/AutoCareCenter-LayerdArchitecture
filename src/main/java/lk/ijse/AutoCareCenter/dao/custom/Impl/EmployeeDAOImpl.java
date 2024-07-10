@@ -60,4 +60,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         return 0;
     }
 
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        ResultSet rst = SqlUtil.execute("SELECT empId FROM employee ORDER BY empId desc LIMIT 1");
+
+        if(rst.next()) {
+            return rst.getString(1);
+        }
+        return null;
+    }
+
 }

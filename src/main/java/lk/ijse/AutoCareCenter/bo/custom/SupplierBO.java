@@ -23,4 +23,6 @@ public interface SupplierBO extends SuperBO {
     public boolean delete(String id) throws SQLException, ClassNotFoundException;
 
     public List<String> getIds() throws SQLException, ClassNotFoundException ;
+    public  String currentId() throws SQLException, ClassNotFoundException;
+
 }

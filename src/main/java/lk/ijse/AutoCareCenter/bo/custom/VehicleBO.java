@@ -22,4 +22,6 @@ public interface VehicleBO extends SuperBO {
     public Vehicle searchById(String id) throws SQLException, ClassNotFoundException;
 
     public List<String> getIds() throws SQLException, ClassNotFoundException;
+    public  String currentId() throws SQLException, ClassNotFoundException;
+
 }

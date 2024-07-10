@@ -46,4 +46,9 @@ public class OrderDetailsDAOImpl implements OrderDetailDAO {
     public int getMaterialCount() throws SQLException, ClassNotFoundException {
         return 0;
     }
+
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        return null;
+    }
 }

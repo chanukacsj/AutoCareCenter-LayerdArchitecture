@@ -185,5 +185,10 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
+      <Label fx:id="lblId" layoutX="122.0" layoutY="190.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

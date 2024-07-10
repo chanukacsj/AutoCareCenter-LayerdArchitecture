@@ -53,14 +53,14 @@ public class VehicleFormController {
     @FXML
     private TableView<VehicleTm> tblVehicle;
 
-    @FXML
-    private TextField txtId;
 
     @FXML
     private TextField txtNumber;
 
     @FXML
     private TextField txtType;
+    @FXML
+    private Label lblId;
     VehicleBO vehicleBO = (VehicleBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.VEHICLE);
     CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
     Integer index;
@@ -68,6 +68,7 @@ public class VehicleFormController {
         setCellValueFactory();
         getCustomerIds();
         loadAllVehicles();
+        loadNextId();
     }
 
     private void setCellValueFactory() {
@@ -82,11 +83,33 @@ public class VehicleFormController {
             return;
         } else {
 
-            txtId.setText(tblVehicle.getItems().get(index).getId());
+            lblId.setText(tblVehicle.getItems().get(index).getId());
             txtType.setText(tblVehicle.getItems().get(index).getType());
             txtNumber.setText(tblVehicle.getItems().get(index).getNumber());
             CmbCusId.setValue(tblVehicle.getItems().get(index).getCusId());
         }
+    }
+    private void loadNextId() {
+        try {
+            String currentId = vehicleBO.currentId();
+            String nextId = nextId(currentId);
+
+            lblId.setText(nextId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String nextId(String currentId) {
+        if (currentId != null) {
+            String[] split = currentId.split("V");
+            int id = Integer.parseInt(split[1]);
+            return "V" + ++id;
+
+        }
+        return "V";
     }
 
     public void loadAllVehicles() {
@@ -112,7 +135,7 @@ public class VehicleFormController {
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = lblId.getText();
 
         try {
             boolean isDeleted = vehicleBO.delete(id);
@@ -131,7 +154,7 @@ public class VehicleFormController {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = lblId.getText();
         String type = txtType.getText();
         String number = txtNumber.getText();
         String cusId = CmbCusId.getValue();
@@ -151,12 +174,13 @@ public class VehicleFormController {
                 throw new RuntimeException(e);
             }
             loadAllVehicles();
+            clearFields();
         }
     }
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = lblId.getText();
         String type = txtType.getText();
         String number = txtNumber.getText();
         String cusId = CmbCusId.getValue();
@@ -176,19 +200,20 @@ public class VehicleFormController {
                 throw new RuntimeException(e);
             }
             loadAllVehicles();
+            clearFields();
         }
     }
 
     @FXML
     void txtSearchOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = txtNumber.getText();
 
 
         try {
             Vehicle vehicleDTO = vehicleBO.searchById(id);
 
             if (vehicleDTO != null) {
-                txtId.setText(vehicleDTO.getId());
+                lblId.setText(vehicleDTO.getId());
                 txtType.setText(vehicleDTO.getType());
                 txtNumber.setText(vehicleDTO.getNumber());
                 CmbCusId.setValue(vehicleDTO.getCusId());
@@ -238,20 +263,21 @@ public class VehicleFormController {
     }
 
     private void clearFields() {
-        txtId.setText("");
+
         txtType.setText("");
         txtNumber.setText("");
+        loadNextId();
     }
 
 
     public boolean isValid() {
-        if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId)) return false;
+     //   if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.NAME, (JFXTextField) txtType)) return false;
         return true;
     }
 
     public void txtVehicleIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId);
+       // Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId);
     }
 
 

@@ -19,4 +19,7 @@ public interface RepairBO extends SuperBO {
     public boolean update(RepairDTO repairDTO) throws SQLException, ClassNotFoundException;
 
     public Repair searchById(String id) throws SQLException, ClassNotFoundException;
+
+    public  String currentId() throws SQLException, ClassNotFoundException;
+
 }

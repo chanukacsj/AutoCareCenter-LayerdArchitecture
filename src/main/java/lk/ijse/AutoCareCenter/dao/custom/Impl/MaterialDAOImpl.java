@@ -40,6 +40,16 @@ public class MaterialDAOImpl implements MaterialDAO {
     }
 
     @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        ResultSet rst = SqlUtil.execute("SELECT code FROM materials ORDER BY code desc LIMIT 1");
+
+        if(rst.next()) {
+            return rst.getString(1);
+        }
+        return null;
+    }
+
+    @Override
     public ArrayList<Materials> loadAll() throws SQLException, ClassNotFoundException {
         return null;
     }

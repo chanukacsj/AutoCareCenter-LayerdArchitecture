@@ -51,4 +51,9 @@ public class SupplierBOImpl implements SupplierBO {
     public List<String> getIds() throws SQLException, ClassNotFoundException {
         return supplierDAO.getIds();
     }
+
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        return supplierDAO.currentId();
+    }
 }

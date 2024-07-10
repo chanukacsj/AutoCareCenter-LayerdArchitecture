@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface CustomerBO extends SuperBO {
+    public  String currentId() throws SQLException, ClassNotFoundException;
+
     public ArrayList<CustomerDTO> loadAll() throws SQLException, ClassNotFoundException;
 
     public boolean save(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException;

@@ -48,4 +48,9 @@ public class EmployeeBOImpl implements EmployeeBO {
     public List<String> getIds() throws SQLException, ClassNotFoundException {
         return employeeDAO.getIds();
     }
+
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        return employeeDAO.currentId();
+    }
 }

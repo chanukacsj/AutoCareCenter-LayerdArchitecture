@@ -24,6 +24,8 @@ public class CustomerFormController {
 
     @FXML
     private TableColumn<?, ?> colAddress;
+    @FXML
+    private Label lblCusId;
 
     @FXML
     private TableColumn<?, ?> colId;
@@ -41,8 +43,8 @@ public class CustomerFormController {
     @FXML
     private TextField txtAddress;
 
-    @FXML
-    private TextField txtId;
+   // @FXML
+   // private TextField txtId;
 
     @FXML
     private TextField txtName;
@@ -53,9 +55,11 @@ public class CustomerFormController {
 
     // private List<Customer> customerList = new ArrayList<>();
     Integer index;
+
     public void initialize() {
         // this.customerList = getAllCustomers();
         setCellValueFactory();
+        loadNextId();
         //loadCustomerTable();
         loadAllCustomers();
     }
@@ -63,22 +67,47 @@ public class CustomerFormController {
     private void setCellValueFactory() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        colAddress.setCellValueFactory(new PropertyValueFactory<>("contact"));
-        colContact.setCellValueFactory(new PropertyValueFactory<>("address"));
+        colContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
 
 
     }
+
     @FXML
     void getCustomers(MouseEvent event) {
         index = tblCustomer.getSelectionModel().getSelectedIndex();
-        if(index <= -1) {
+        if (index <= -1) {
             return;
         } else {
-            txtId.setText(tblCustomer.getItems().get(index).getId());
+            lblCusId.setText(tblCustomer.getItems().get(index).getId());
             txtName.setText(tblCustomer.getItems().get(index).getName());
             txtAddress.setText(tblCustomer.getItems().get(index).getAddress());
             txtContact.setText(tblCustomer.getItems().get(index).getContact());
         }
+    }
+
+    private void loadNextId() {
+        try {
+            String currentId = customerBO.currentId();
+            String nextId = nextId(currentId);
+
+            lblCusId.setText(nextId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String nextId(String currentId) {
+        if (currentId != null) {
+            String[] split = currentId.split("C");
+//            System.out.println("Arrays.toString(split) = " + Arrays.toString(split));
+            int id = Integer.parseInt(split[1]);    //2
+            return "C" + ++id;
+
+        }
+        return "C1";
     }
 
     public void loadAllCustomers() {
@@ -89,7 +118,7 @@ public class CustomerFormController {
             ArrayList<CustomerDTO> customerDTOS = customerBO.loadAll();
 
             for (CustomerDTO customerDTO : customerDTOS) {
-                tblCustomer.getItems().add(new CustomerTm(customerDTO.getId(), customerDTO.getName(), customerDTO.getAddress(), customerDTO.getContact()));
+                tblCustomer.getItems().add(new CustomerTm(customerDTO.getId(), customerDTO.getName(), customerDTO.getContact(),customerDTO.getAddress()));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -99,7 +128,7 @@ public class CustomerFormController {
     }
 
     public void btnSaveOnAction(ActionEvent actionEvent) {
-        String id = txtId.getText();
+        String id = lblCusId.getText();
         String name = txtName.getText();
         String address = txtAddress.getText();
         String contact = txtContact.getText();
@@ -120,19 +149,22 @@ public class CustomerFormController {
                 throw new RuntimeException(e);
             }
             loadAllCustomers();
+            clearFields();
+            loadNextId();
         }
     }
 
     private void clearFields() {
-        txtId.setText("");
+      //  txtId.setText("");
         txtName.setText("");
         txtAddress.setText("");
         txtContact.setText("");
+        loadNextId();
     }
 
     @FXML
     public void btnUpdateOnAction(ActionEvent actionEvent) {
-        String id = txtId.getText();
+        String id = lblCusId.getText();
         String name = txtName.getText();
         String address = txtAddress.getText();
         String contact = txtContact.getText();
@@ -152,12 +184,14 @@ public class CustomerFormController {
                 throw new RuntimeException(e);
             }
             loadAllCustomers();
+            clearFields();
+            loadNextId();
         }
     }
 
     @FXML
     public void btnDeleteOnAction(ActionEvent actionEvent) {
-        String id = txtId.getText();
+        String id = lblCusId.getText();
 
         try {
 
@@ -172,6 +206,7 @@ public class CustomerFormController {
         }
         loadAllCustomers();
         clearFields();
+        loadNextId();
     }
 
     public void btnClearOnAction(ActionEvent actionEvent) {
@@ -181,7 +216,7 @@ public class CustomerFormController {
 
     @FXML
     void txtSearchOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = txtName.getText();
 
         try {
 
@@ -189,7 +224,7 @@ public class CustomerFormController {
 
 
             if (customerDTO != null) {
-                txtId.setText(customerDTO.getId());
+                lblCusId.setText(customerDTO.getId());
                 txtName.setText(customerDTO.getName());
                 txtAddress.setText(customerDTO.getAddress());
                 txtContact.setText(customerDTO.getContact());
@@ -202,7 +237,7 @@ public class CustomerFormController {
     }
 
     public boolean isValid() {
-        if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId)) return false;
+       // if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.NAME, (JFXTextField) txtName)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.CONTACT, (JFXTextField) txtContact)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ADDRESS, (JFXTextField) txtAddress)) return false;
@@ -210,7 +245,7 @@ public class CustomerFormController {
     }
 
     public void txtCustomerIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId);
+      //  Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId);
     }
 
     public void txtCustomerNameOnKeyReleased(KeyEvent keyEvent) {

@@ -63,8 +63,8 @@ public class BookingFormController {
     @FXML
     private TableView<BookingTm> tblBooking;
 
-    @FXML
-    private TextField txtBookingId;
+  //  @FXML
+    //private TextField txtBookingId;
     @FXML
     private JFXTextField txtTime;
     @FXML
@@ -76,6 +76,8 @@ public class BookingFormController {
 
     @FXML
     private Label lblCustomerName;
+    @FXML
+    private Label lblId;
 
 
     VehicleBO vehicleBO = (VehicleBO)BOFactory.getBoFactory().getBO(BOFactory.BOTypes.VEHICLE);
@@ -85,6 +87,7 @@ public class BookingFormController {
     Integer index;
     public void initialize() {
         setCellValueFactory();
+        loadNextId();
         getCustomerIds();
         getVehicleIds();
         loadAllBooking();
@@ -105,7 +108,7 @@ public class BookingFormController {
         if(index <= -1) {
             return;
         } else {
-            txtBookingId.setText(tblBooking.getItems().get(index).getId());
+            lblId.setText(tblBooking.getItems().get(index).getId());
             CmbCusId.setValue(tblBooking.getItems().get(index).getCusId());
             CmbVehicleId.setValue(tblBooking.getItems().get(index).getVId());
             txtDate.setValue(LocalDate.parse(tblBooking.getItems().get(index).getDate()));
@@ -114,10 +117,32 @@ public class BookingFormController {
             txtTime.setText(tblBooking.getItems().get(index).getTime());
         }
     }
+    private void loadNextId() {
+        try {
+            String currentId = bookingBO.currentId();
+            String nextId = nextId(currentId);
 
+            lblId.setText(nextId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String nextId(String currentId) {
+        if (currentId != null) {
+            String[] split = currentId.split("B");
+//            System.out.println("Arrays.toString(split) = " + Arrays.toString(split));
+            int id = Integer.parseInt(split[1]);    //2
+            return "B" + ++id;
+
+        }
+        return "B1";
+    }
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        String id = txtBookingId.getText();
+        String id = lblId.getText();
         String date = String.valueOf(txtDate.getValue());
         String description = txtDescription.getText();
         String contact = txtContact.getText();
@@ -140,12 +165,13 @@ public class BookingFormController {
             }
             loadAllBooking();
             clearFields();
+            loadNextId();
         }
     }
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
-        String id = txtBookingId.getText();
+        String id = lblId.getText();
 
         try {
             boolean isDeleted = bookingBO.delete(id);
@@ -163,7 +189,7 @@ public class BookingFormController {
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        String id = txtBookingId.getText();
+        String id = lblId.getText();
         String date = String.valueOf(txtDate.getValue());
         String description = txtDescription.getText();
         String contact = txtContact.getText();
@@ -185,18 +211,19 @@ public class BookingFormController {
         }
         loadAllBooking();
         clearFields();
+        loadNextId();
     }
 
     @FXML
     void txtSearchOnAction(ActionEvent event) {
-        String id = txtBookingId.getText();
+        String id = txtContact.getText();
 
 
         try {
             Booking bookingDTO = bookingBO.searchById(id);
 
             if (bookingDTO != null) {
-                txtBookingId.setText(bookingDTO.getId());
+                lblId.setText(bookingDTO.getId());
                 txtDate.setValue(LocalDate.parse(bookingDTO.getDate()));
                 txtDescription.setText(bookingDTO.getDescription());
                 txtContact.setText(bookingDTO.getContact());
@@ -287,12 +314,13 @@ public class BookingFormController {
     }
 
     private void clearFields() {
-        txtBookingId.setText("");
+       // lblId.setText("");
         txtContact.setText("");
         txtDescription.setText("");
         txtTime.setText("");
         CmbCusId.setValue("");
         CmbVehicleId.setValue("");
+        loadNextId();
     }
 
     @FXML
@@ -301,11 +329,11 @@ public class BookingFormController {
     }
 
     public void txtBookingIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtBookingId);
+      //  Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtBookingId);
     }
 
     public boolean isValid() {
-        if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtBookingId)) return false;
+      //  if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtBookingId)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.CONTACT, (JFXTextField) txtContact)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.NAME, (JFXTextField) txtDescription))
             return false;

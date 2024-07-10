@@ -171,5 +171,10 @@
       <JFXTextField fx:id="txtNumber" layoutX="237.0" layoutY="283.0" onKeyReleased="#txtVehicleNumberOnKeyReleased" prefHeight="26.0" prefWidth="164.0" />
       <JFXTextField fx:id="txtType" layoutX="445.0" layoutY="196.0" onKeyReleased="#txtVehicleTypeOnKeyReleased" prefHeight="26.0" prefWidth="164.0" />
       <ButtonBar layoutX="74.0" layoutY="125.0" prefHeight="40.0" prefWidth="200.0" />
+      <Label fx:id="lblId" layoutX="275.0" layoutY="197.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
