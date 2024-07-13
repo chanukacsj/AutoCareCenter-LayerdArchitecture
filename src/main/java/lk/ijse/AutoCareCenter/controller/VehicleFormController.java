@@ -62,7 +62,6 @@ public class VehicleFormController {
     @FXML
     private Label lblId;
     VehicleBO vehicleBO = (VehicleBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.VEHICLE);
-    CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
     Integer index;
     public void initialize() {
         setCellValueFactory();
@@ -109,7 +108,7 @@ public class VehicleFormController {
             return "V" + ++id;
 
         }
-        return "V";
+        return "V1";
     }
 
     public void loadAllVehicles() {
@@ -232,7 +231,7 @@ public class VehicleFormController {
         try {
 
 
-            List<String> idList = customerBO.getIds();
+            List<String> idList = vehicleBO.getCustomerIds();
 
             for (String id : idList) {
                 obList.add(id);
@@ -251,7 +250,7 @@ public class VehicleFormController {
         String cusId = CmbCusId.getValue();
 
         try {
-            Customer customerDTO = customerBO.searchById(cusId);
+            Customer customerDTO = vehicleBO.searchByCustomerId(cusId);
 
             lblCustomerName.setText(customerDTO.getName());
 

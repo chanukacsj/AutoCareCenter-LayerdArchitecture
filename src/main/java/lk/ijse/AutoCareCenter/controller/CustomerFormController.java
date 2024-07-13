@@ -52,8 +52,6 @@ public class CustomerFormController {
     @FXML
     private TextField txtContact;
     CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
-
-    // private List<Customer> customerList = new ArrayList<>();
     Integer index;
 
     public void initialize() {

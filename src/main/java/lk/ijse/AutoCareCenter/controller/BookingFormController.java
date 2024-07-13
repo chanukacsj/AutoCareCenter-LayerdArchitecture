@@ -79,10 +79,6 @@ public class BookingFormController {
     @FXML
     private Label lblId;
 
-
-    VehicleBO vehicleBO = (VehicleBO)BOFactory.getBoFactory().getBO(BOFactory.BOTypes.VEHICLE);
-
-    CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
     BookingBO bookingBO = (BookingBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.BOOKING);
     Integer index;
     public void initialize() {
@@ -246,7 +242,7 @@ public class BookingFormController {
         try {
 
 
-            List<String> idList = customerBO.getIds();
+            List<String> idList = bookingBO.getCusIds();
 
             for (String id : idList) {
                 obList.add(id);
@@ -265,7 +261,7 @@ public class BookingFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = vehicleBO.getIds();
+            List<String> idList = bookingBO.getBookingIds();
             for (String id : idList) {
                 obList.add(id);
             }
@@ -285,7 +281,7 @@ public class BookingFormController {
         String cusId = CmbCusId.getValue();
 
         try {
-            Customer customerDTO = customerBO.searchById(cusId);
+            Customer customerDTO = bookingBO.searchByCusId(cusId);
 
             lblCustomerName.setText(customerDTO.getName());
         } catch (SQLException e) {

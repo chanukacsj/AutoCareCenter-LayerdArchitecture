@@ -2,7 +2,9 @@ package lk.ijse.AutoCareCenter.bo.custom.impl;
 
 import lk.ijse.AutoCareCenter.bo.custom.RepairBO;
 import lk.ijse.AutoCareCenter.dao.DAOFactory;
+import lk.ijse.AutoCareCenter.dao.custom.EmployeeDAO;
 import lk.ijse.AutoCareCenter.dao.custom.RepairDAO;
+import lk.ijse.AutoCareCenter.dao.custom.VehicleDAO;
 import lk.ijse.AutoCareCenter.entity.Booking;
 import lk.ijse.AutoCareCenter.entity.Repair;
 import lk.ijse.AutoCareCenter.model.BookingDTO;
@@ -10,10 +12,13 @@ import lk.ijse.AutoCareCenter.model.RepairDTO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RepairBOImpl implements RepairBO {
     RepairDAO repairDAO = (RepairDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.REPAIR);
+    EmployeeDAO employeeDAO = (EmployeeDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.EMPLOYEE);
 
+    VehicleDAO vehicleDAO = (VehicleDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.VEHICLE);
     @Override
     public ArrayList<RepairDTO> loadAll() throws SQLException, ClassNotFoundException {
         ArrayList<RepairDTO> allRepair = new ArrayList<>();
@@ -48,5 +53,15 @@ public class RepairBOImpl implements RepairBO {
     @Override
     public String currentId() throws SQLException, ClassNotFoundException {
         return repairDAO.currentId();
+    }
+
+    @Override
+    public List<String> getRepairIds() throws SQLException, ClassNotFoundException {
+        return employeeDAO.getIds();
+    }
+
+    @Override
+    public List<String> getVehicleIds() throws SQLException, ClassNotFoundException {
+        return vehicleDAO.getIds();
     }
 }

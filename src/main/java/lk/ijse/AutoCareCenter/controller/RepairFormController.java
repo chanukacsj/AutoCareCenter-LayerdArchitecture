@@ -69,17 +69,12 @@ public class RepairFormController {
     @FXML
     private JFXTextField txtEndTime;
 
-
-   // private JFXTextField txtRepairId;
-
     @FXML
     private JFXTextField txtStartTime;
     @FXML
     private Label lblId;
     RepairBO repairBO = (RepairBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.REPAIR);
-    EmployeeBO employeeBO = (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
 
-    VehicleBO vehicleBO = (VehicleBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.VEHICLE);
     Integer index;
 
     public void initialize() {
@@ -161,6 +156,8 @@ public class RepairFormController {
         txtStartTime.setText("");
         txtEndTime.setText("");
         txtDescription.setText("");
+        cmbVehicleId.setValue("");
+        cmbEmpId.setValue("");
         loadNextId();
     }
 
@@ -275,7 +272,7 @@ public class RepairFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = employeeBO.getIds();
+            List<String> idList = repairBO.getRepairIds();
 
             for (String id : idList) {
                 obList.add(id);
@@ -296,7 +293,7 @@ public class RepairFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = vehicleBO.getIds();
+            List<String> idList = repairBO.getVehicleIds();
 
             for (String id : idList) {
                 obList.add(id);

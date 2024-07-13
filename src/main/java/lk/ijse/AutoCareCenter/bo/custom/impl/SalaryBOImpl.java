@@ -2,17 +2,21 @@ package lk.ijse.AutoCareCenter.bo.custom.impl;
 
 import lk.ijse.AutoCareCenter.bo.custom.SalaryBO;
 import lk.ijse.AutoCareCenter.dao.DAOFactory;
+import lk.ijse.AutoCareCenter.dao.custom.EmployeeDAO;
 import lk.ijse.AutoCareCenter.dao.custom.SalaryDAO;
-import lk.ijse.AutoCareCenter.entity.Booking;
+import lk.ijse.AutoCareCenter.entity.Employee;
 import lk.ijse.AutoCareCenter.entity.Salary;
-import lk.ijse.AutoCareCenter.model.BookingDTO;
 import lk.ijse.AutoCareCenter.model.SalaryDTO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SalaryBOImpl implements SalaryBO {
+
     SalaryDAO salaryDAO = (SalaryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.SALARY);
+    EmployeeDAO employeeDAO = (EmployeeDAO)DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.EMPLOYEE);
+
     @Override
     public ArrayList<SalaryDTO> loadAll() throws SQLException, ClassNotFoundException {
         ArrayList<SalaryDTO> allSalary = new ArrayList<>();
@@ -48,4 +52,15 @@ public class SalaryBOImpl implements SalaryBO {
     public String currentId() throws SQLException, ClassNotFoundException {
         return salaryDAO.currentId();
     }
+
+    @Override
+    public List<String> getIds() throws SQLException, ClassNotFoundException {
+        return employeeDAO.getIds();
+    }
+
+    @Override
+    public Employee searchByEmpId(String id) throws SQLException, ClassNotFoundException {
+        return employeeDAO.searchById(id);
+    }
+
 }

@@ -4,6 +4,7 @@ import lk.ijse.AutoCareCenter.bo.custom.PurchaseOrderBO;
 import lk.ijse.AutoCareCenter.dao.DAOFactory;
 import lk.ijse.AutoCareCenter.dao.custom.*;
 import lk.ijse.AutoCareCenter.db.DbConnection;
+import lk.ijse.AutoCareCenter.entity.Customer;
 import lk.ijse.AutoCareCenter.entity.MaterialDetails;
 import lk.ijse.AutoCareCenter.entity.OrderDetails;
 import lk.ijse.AutoCareCenter.entity.Orders;
@@ -15,12 +16,16 @@ import java.util.List;
 
 public class PurchaseOrderBOImpl implements PurchaseOrderBO {
 
-    CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
-    MaterialDAO materialDAO = (MaterialDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.MATERIAL);
     OrderDAO orderDAO = (OrderDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDER);
     OrderDetailDAO orderDetailDAO = (OrderDetailDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDERDETAILS);
-    BookingDAO bookingDAO = (BookingDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.BOOKING);
+
     MaterialDetailDAO materialDetailDAO = (MaterialDetailDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.MATERIALDETAIL);
+    CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
+
+    MaterialDAO materialDAO = (MaterialDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.MATERIAL);
+
+    BookingDAO bookingDAO = (BookingDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.BOOKING);
+
 
     @Override
     public boolean exist(String orderId) throws SQLException, ClassNotFoundException {
@@ -50,17 +55,17 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
             connection.setAutoCommit(false);
             //Save the Order to the order table
             boolean b2 = orderDAO.save(new Orders(dto.getOrderId(), dto.getCusId(), dto.getDate(), dto.getBId()));
-            System.out.println("save");
+
 
             if (!b2) {
-                System.out.println("awa2");
+
                 connection.rollback();
                 connection.setAutoCommit(true);
                 return false;
             }
 
             for (OrderDetailsDTO d : dto.getOrderDetails()) {
-                System.out.println("awa");
+
                 OrderDetails orderDetails = new OrderDetails(d.getOrderId(), d.getCode(), d.getQty(), d.getUnitPrice(), d.getService_charge(), d.getTotal());
                 boolean b3 = orderDetailDAO.save(orderDetails);
                 System.out.println("save");
@@ -121,6 +126,31 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
     @Override
     public List<String> getBooking() throws SQLException, ClassNotFoundException {
         return null;
+    }
+
+    @Override
+    public Customer searchById(String id) throws SQLException, ClassNotFoundException {
+        return customerDAO.searchById(id);
+    }
+
+    @Override
+    public List<String> getIds() throws SQLException, ClassNotFoundException {
+        return customerDAO.getIds();
+    }
+
+    @Override
+    public MaterialDetails searchByMaterialId(String code) throws SQLException, ClassNotFoundException {
+        return materialDetailDAO.searchById(code);
+    }
+
+    @Override
+    public List<String> getCodes() throws SQLException, ClassNotFoundException {
+        return materialDAO.getCodes();
+    }
+
+    @Override
+    public List<String> getBookingIds() throws SQLException, ClassNotFoundException {
+        return bookingDAO.getIds();
     }
 
 }

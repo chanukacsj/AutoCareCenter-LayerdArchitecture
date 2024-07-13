@@ -97,20 +97,7 @@ public class OrdersFormController {
     private TextField txtQty;
     private ObservableList<OrdersTm> ordersList = FXCollections.observableArrayList();
     private double netTotal = 0;
-
-  //  OrderDAOImpl orderDAO = new OrderDAOImpl();
-  //  OrderDetailsDAOImpl orderDetailsDAO = new OrderDetailsDAOImpl();
-
-   // CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-   // MaterialDAOImpl materialDAO = new MaterialDAOImpl();
-   // MaterialDetailsDAOImpl materialDetailsDAOImpl = new MaterialDetailsDAOImpl();
-  //  BookingDAOImpl bookingDAO = new BookingDAOImpl();
     PurchaseOrderBO purchaseOrderBO = (PurchaseOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PO);
-    CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
-    MaterialDetailBO materialDetailBO = (MaterialDetailBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.MATERIALDETAILS);
-    BookingBO bookingBO = (BookingBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.BOOKING);
-    MaterialBO materialBO = (MaterialBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.MATERIAL);
-
 
     public void initialize() {
         setCellValueFactory();
@@ -243,8 +230,8 @@ public class OrdersFormController {
 
 
     public boolean saveOrder(String orderId, String cusId, Date date, String bId, List<OrderDetailsDTO> orderDetails) throws SQLException, ClassNotFoundException {
-            OrdersDTO orderDTO = new OrdersDTO(orderId, cusId, date, bId, orderDetails);
-            return purchaseOrderBO.saveOrder(orderDTO);
+        OrdersDTO orderDTO = new OrdersDTO(orderId, cusId, date, bId, orderDetails);
+        return purchaseOrderBO.saveOrder(orderDTO);
     }
 
 
@@ -253,7 +240,7 @@ public class OrdersFormController {
         String cusId = cmbCustomerId.getValue();
 
         try {
-            Customer customerDTO = customerBO.searchById(cusId);
+            Customer customerDTO = purchaseOrderBO.searchById(cusId);
             LblCustomerName.setText(customerDTO.getName());
 
         } catch (SQLException e) {
@@ -268,7 +255,7 @@ public class OrdersFormController {
     void cmbmaterialOnAction(ActionEvent event) {
         String code = cmbMaterialCode.getValue();
         try {
-            MaterialDetails materials = materialDetailBO.searchById(code);
+            MaterialDetails materials = purchaseOrderBO.searchByMaterialId(code);
             if (materials != null) {
                 lblDescription.setText(materials.getDescription());
                 lblUnitPrice.setText(String.valueOf(materials.getUnitPrice()));
@@ -296,10 +283,10 @@ public class OrdersFormController {
 
     private void getCustomerIds() {
 
-     ObservableList<String> obList = FXCollections.observableArrayList();
+        ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = customerBO.getIds();
+            List<String> idList = purchaseOrderBO.getIds();
 
             for (String id : idList) {
                 obList.add(id);
@@ -315,10 +302,10 @@ public class OrdersFormController {
 
     public void getMaterialsIds() {
 
-       ObservableList<String> obList = FXCollections.observableArrayList();
+        ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = materialBO.getCodes();
+            List<String> idList = purchaseOrderBO.getCodes();
 
             for (String id : idList) {
                 obList.add(id);
@@ -333,12 +320,12 @@ public class OrdersFormController {
         }
     }
 
-    private  void getBooking(){
+    private void getBooking() {
 
-      ObservableList<String> obList = FXCollections.observableArrayList();
+        ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = bookingBO.getIds();
+            List<String> idList = purchaseOrderBO.getBookingIds();
 
             for (String id : idList) {
                 obList.add(id);

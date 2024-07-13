@@ -8,6 +8,7 @@ import lk.ijse.AutoCareCenter.model.RepairDTO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface RepairBO extends SuperBO {
     public ArrayList<RepairDTO> loadAll() throws SQLException, ClassNotFoundException;
@@ -22,4 +23,7 @@ public interface RepairBO extends SuperBO {
 
     public  String currentId() throws SQLException, ClassNotFoundException;
 
+    public List<String> getRepairIds() throws SQLException, ClassNotFoundException ;
+
+    public List<String> getVehicleIds() throws SQLException, ClassNotFoundException ;
 }

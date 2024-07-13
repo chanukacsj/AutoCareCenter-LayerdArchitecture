@@ -55,8 +55,8 @@ public class MaterialFormController {
     @FXML
     private AnchorPane root;
 
-  //  @FXML
-   // private TextField txtCode;
+    //  @FXML
+    // private TextField txtCode;
 
     @FXML
     private TextField txtDescription;
@@ -71,11 +71,10 @@ public class MaterialFormController {
 
 
     MaterialDetailBO materialDetailBO = (MaterialDetailBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.MATERIALDETAILS);
-    SupplierBO supplierBO = (SupplierBO)BOFactory.getBoFactory().getBO(BOFactory.BOTypes.SUPPLIER);
-
     MaterialBO materialBO = (MaterialBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.MATERIAL);
 
     Integer index;
+
     public void initialize() {
         setCellValueFactory();
         loadNextId();
@@ -90,10 +89,11 @@ public class MaterialFormController {
         colQtyOnHand.setCellValueFactory(new PropertyValueFactory<>("qtyOnHand"));
         colSupId.setCellValueFactory(new PropertyValueFactory<>("supId"));
     }
+
     @FXML
     void getMaterials(MouseEvent event) {
         index = tblMaterial.getSelectionModel().getSelectedIndex();
-        if(index <= -1) {
+        if (index <= -1) {
             return;
         } else {
             lblId.setText(tblMaterial.getItems().get(index).getCode());
@@ -103,6 +103,7 @@ public class MaterialFormController {
             cmbSupId.setValue(tblMaterial.getItems().get(index).getSupId());
         }
     }
+
     private void loadNextId() {
         try {
             String currentId = materialBO.currentId();
@@ -177,7 +178,7 @@ public class MaterialFormController {
 
         MaterialsDTO materialsDTO = new MaterialsDTO(code);
         MaterialDetailsDTO materialDetailsDTO = new MaterialDetailsDTO(code, supId, description, unitprice, qtyonhand);
-       
+
 
         try {
 
@@ -268,7 +269,7 @@ public class MaterialFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = supplierBO.getIds();
+            List<String> idList = materialBO.getSupplierIds();
 
             for (String id : idList) {
                 obList.add(id);
@@ -283,7 +284,7 @@ public class MaterialFormController {
     }
 
     public boolean isValid() {
-      //  if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtCode)) return false;
+        //  if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtCode)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, (JFXTextField) txtUnitPrice))
             return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, (JFXTextField) txtQtyOnHand))
@@ -292,7 +293,7 @@ public class MaterialFormController {
     }
 
     public void txtIDOnKeyReleased(KeyEvent keyEvent) {
-      //  Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtCode);
+        //  Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtCode);
     }
 
     public void txtPriceOnKeyReleased(KeyEvent keyEvent) {

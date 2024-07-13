@@ -43,8 +43,6 @@ public class SupplierFormController {
     @FXML
     private TextField txtContact;
 
-
-
     @FXML
     private TextField txtName;
     @FXML
@@ -73,7 +71,7 @@ public class SupplierFormController {
     @FXML
     void getSupplier(MouseEvent event) {
         index = tblSupplier.getSelectionModel().getSelectedIndex();
-        if(index <= -1) {
+        if (index <= -1) {
             return;
         } else {
             lblId.setText(tblSupplier.getItems().get(index).getId());
@@ -82,6 +80,7 @@ public class SupplierFormController {
             txtContact.setText(tblSupplier.getItems().get(index).getContact());
         }
     }
+
     private void loadNextId() {
         try {
             String currentId = supplierBO.currentId();
@@ -123,6 +122,7 @@ public class SupplierFormController {
         }
 
     }
+
     private void clearFields() {
 
         txtName.setText("");
@@ -226,7 +226,7 @@ public class SupplierFormController {
     }
 
     public boolean isValid() {
-       // if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId)) return false;
+        // if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.NAME, (JFXTextField) txtName)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.CONTACT, (JFXTextField) txtContact)) return false;
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ADDRESS, (JFXTextField) txtAddress)) return false;
@@ -234,7 +234,7 @@ public class SupplierFormController {
     }
 
     public void txtIdOnKeyReleased(KeyEvent keyEvent) {
-       // Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId);
+        // Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId);
     }
 
     public void txtNameOnKeyReleased(KeyEvent keyEvent) {

@@ -65,8 +65,6 @@ public class SalaryFormController {
     @FXML
     private Label lblId;
     SalaryBO salaryBO = (SalaryBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.SALARY);
-    EmployeeBO employeeBO = (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
-
     Integer index;
 
     public void initialize() {
@@ -245,7 +243,7 @@ public class SalaryFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = employeeBO.getIds();
+            List<String> idList = salaryBO.getIds();
 
             for (String id : idList) {
                 obList.add(id);
@@ -264,7 +262,7 @@ public class SalaryFormController {
 
         String id = CmbEmpId.getValue();
         try {
-            Employee employeeDTO = employeeBO.searchById(id);
+            Employee employeeDTO = salaryBO.searchByEmpId(id);
             if (employeeDTO != null) {
                 LblEmpName.setText(employeeDTO.getName());
 
